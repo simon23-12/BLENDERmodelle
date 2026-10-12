@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "BLENDERmodelle", "runtimeExecutable": "node", "runtimeArgs": ["serve.mjs", "5184"], "port": 5184 }
+  ]
+}

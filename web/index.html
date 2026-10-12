@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#060c18" />
+  <title>LMG 3D Modellierung · LMG TECH</title>
+  <meta name="description" content="Interaktive 3D-Modelle für den Unterricht am LMG: in Blender modelliert, im Browser erkundbar – Physik, Chemie, Biologie, Erdkunde, Geschichte und Mathematik." />
+  <meta property="og:image" content="img/gpress.jpg" />
+  <link rel="icon" type="image/png" href="lmg-tech-logo.png" />
+  <link rel="apple-touch-icon" href="lmg-tech-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #060c18;
+      --panel: rgba(9, 18, 33, 0.72);
+      --line: rgba(160, 200, 235, 0.14);
+      --line-strong: rgba(160, 200, 235, 0.3);
+      --text: #e8f0f8;
+      --muted: #93a8c0;
+      --faint: #5e7690;
+      --orange: #f39a2e;
+      --serif: 'Fraunces', Georgia, serif;
+      --sans: 'IBM Plex Sans', system-ui, sans-serif;
+      --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--ink); }
+    body {
+      margin: 0; min-height: 100vh; color: var(--text); font-family: var(--sans);
+      background:
+        radial-gradient(70% 50% at 15% 0%, rgba(243, 154, 46, .10), transparent 60%),
+        radial-gradient(60% 50% at 95% 10%, rgba(77, 179, 255, .10), transparent 60%),
+        var(--ink);
+    }
+    body::after {
+      content: ''; position: fixed; inset: 0; pointer-events: none; opacity: .05; mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+    a { color: inherit; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: clamp(20px, 4vw, 48px) clamp(16px, 4vw, 40px) 56px; }
+
+    header { display: flex; align-items: center; gap: 22px; margin-bottom: clamp(28px, 5vw, 52px); animation: rise .9s cubic-bezier(.2,.8,.2,1) both; }
+    .logo { flex: none; width: 88px; height: 88px; border-radius: 22px; overflow: hidden; box-shadow: 0 12px 34px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.08); }
+    .logo img { width: 100%; height: 100%; display: block; }
+    .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--orange); }
+    h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(34px, 6vw, 62px); line-height: 1; margin: 8px 0 10px; letter-spacing: -.015em; font-variation-settings: "opsz" 144; }
+    h1 em { font-style: italic; font-weight: 400; color: var(--orange); }
+    .lead { margin: 0; max-width: 62ch; color: var(--muted); font-size: clamp(14.5px, 1.6vw, 16.5px); line-height: 1.6; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 22px; }
+    .card {
+      position: relative; display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; text-decoration: none;
+      background: var(--panel); border: 1px solid var(--line); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      transition: transform .3s cubic-bezier(.2,.8,.2,1), border-color .2s, box-shadow .3s;
+      animation: rise .9s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(.08s * var(--i) + .15s);
+    }
+    .card:hover, .card:focus-visible { transform: translateY(-4px); border-color: color-mix(in srgb, var(--c) 60%, transparent); box-shadow: 0 22px 50px rgba(0,0,0,.45); outline: none; }
+    .card::before { content: ''; position: absolute; left: 0; top: 0; right: 0; height: 3px; background: var(--c); z-index: 2; }
+    .thumb { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #0b1526; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+    .card:hover .thumb img { transform: scale(1.04); }
+    .thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,12,24,.85), transparent 45%); }
+    .tags { position: absolute; left: 14px; bottom: 12px; z-index: 1; display: flex; gap: 6px; }
+    .tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; background: rgba(6,12,24,.78); border: 1px solid var(--line-strong); color: var(--text); }
+    .tag.subj { color: #07111d; background: var(--c); border-color: var(--c); font-weight: 500; }
+    .body { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; }
+    .card h2 { font-family: var(--serif); font-weight: 600; font-size: 25px; line-height: 1.1; margin: 0 0 8px; letter-spacing: -.01em; }
+    .card h2 em { font-style: italic; font-weight: 400; color: var(--c); }
+    .card p { margin: 0 0 16px; font-size: 14px; line-height: 1.55; color: #c3d1e2; flex: 1; }
+    .go { display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+    .go .open { font-weight: 600; color: var(--c); }
+    .go .open span { display: inline-block; transition: transform .2s; }
+    .card:hover .go .open span { transform: translateX(4px); }
+    .go .code { font-family: var(--mono); font-size: 11.5px; color: var(--faint); text-decoration: none; position: relative; z-index: 3; }
+    .go .code:hover { color: var(--text); }
+    .stretch { position: absolute; inset: 0; z-index: 1; }
+
+    footer { margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; font-family: var(--mono); font-size: 11.5px; color: var(--faint); }
+
+    @keyframes rise { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: none } }
+    @media (max-width: 560px) {
+      header { gap: 14px; align-items: flex-start; }
+      .logo { width: 60px; height: 60px; border-radius: 16px; }
+      .grid { grid-template-columns: 1fr; gap: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a class="logo" href="#" aria-label="LMG TECH"><img src="lmg-tech-logo.png" alt="LMG TECH Logo" width="88" height="88" /></a>
+      <div>
+        <div class="eyebrow">LMG TECH · Blender → Three.js</div>
+        <h1>LMG <em>3D Modellierung</em></h1>
+        <p class="lead">Interaktive 3D-Modelle für den Unterricht: in Blender modelliert und animiert, im Browser frei drehbar und zoombar – mit anklickbaren Bauteilen, Erklärungen zu jedem Schritt und Live-Werten. Läuft ohne Installation auf Tafel, Laptop, Tablet und Handy.</p>
+      </div>
+    </header>
+
+    <main class="grid" id="grid"></main>
+
+    <footer>
+      <span>LMG Düsseldorf · LMG TECH</span>
+      <span>Modelle: Blender · Darstellung: Three.js · gehostet auf GitHub Pages</span>
+    </footer>
+  </div>
+
+  <script>
+    const BASE = 'https://simon23-12.github.io/';
+    const REPO = 'https://github.com/simon23-12/';
+    const PROJECTS = [
+      { repo: 'BLENDERviertaktmotor', img: 'viertaktmotor', subj: 'Physik', level: 'Sek I', c: '#f39a2e', title: 'Der <em>Viertaktmotor</em>',
+        text: 'Schnittmodell eines Ottomotors: Ansaugen, Verdichten, Arbeiten, Ausstoßen – mit Gasfüllung, Zündfunke, Ventilsteuerung und Live-Druckkurve.' },
+      { repo: 'BLENDERnaclsolution', img: 'nacl', subj: 'Chemie', level: 'Sek I', c: '#4db3ff', title: 'Kochsalz <em>löst sich</em>',
+        text: 'Ein NaCl-Kristall im Wasser: Dipole richten sich aus, Ionen lösen sich von den Ecken her und bekommen eine Hydrathülle.' },
+      { repo: 'BLENDERkinesinmicrotubula', img: 'kinesin', subj: 'Biologie', level: 'Sek II', c: '#5ad1c8', title: 'Kinesin <em>läuft</em>',
+        text: 'Ein Motorprotein trägt ein Vesikel Hand über Hand am Mikrotubulus entlang – Schritt für Schritt mit ATP-Zyklus.' },
+      { repo: 'BLENDERtektonik', img: 'tektonik', subj: 'Erdkunde', level: 'Sek I/II', c: '#ff7a3d', title: 'Platten <em>in Bewegung</em>',
+        text: 'Vom Schalenbau der Erde ins Blockbild: Ozeanbodenspreizung mit Magnetstreifen, Subduktion, Vulkane, Erdbeben, Hotspot und Transformstörung.' },
+      { repo: 'BLENDERgpress', img: 'gpress', subj: 'Geschichte', level: 'Sek I', c: '#e3b45b', title: 'Gutenberg <em>druckt</em>',
+        text: 'Gutenbergs Werkstatt in Mainz: bewegliche Lettern setzen, einfärben, drucken – bis zum seitenrichtigen, von Hand rubrizierten Bogen.' },
+      { repo: 'BLENDERmath', img: 'math', subj: 'Mathematik', level: 'Sek II', c: '#7c9cff', title: 'Vektoren <em>im Raum</em>',
+        text: 'Werkzeug für die analytische Geometrie: Punkte, Geraden und Ebenen eingeben, im Schrägbild untersuchen – mit Rechenweg und Abituraufgaben.' },
+    ];
+    document.getElementById('grid').innerHTML = PROJECTS.map((p, i) => `
+      <article class="card" style="--c:${p.c}; --i:${i}">
+        <a class="stretch" href="${BASE}${p.repo}/" aria-label="${p.title.replace(/<[^>]+>/g, '')} öffnen"></a>
+        <div class="thumb">
+          <img src="img/${p.img}.jpg" alt="" loading="${i < 3 ? 'eager' : 'lazy'}" width="960" height="600" />
+          <div class="tags"><span class="tag subj">${p.subj}</span><span class="tag">${p.level}</span></div>
+        </div>
+        <div class="body">
+          <h2>${p.title}</h2>
+          <p>${p.text}</p>
+          <div class="go"><span class="open">Modell öffnen <span>→</span></span><a class="code" href="${REPO}${p.repo}">Quellcode</a></div>
+        </div>
+      </article>`).join('');
+  </script>
+</body>
+</html>
