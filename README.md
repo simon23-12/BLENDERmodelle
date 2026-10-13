@@ -8,6 +8,7 @@
 | --- | --- | --- |
 | Physik | Der Viertaktmotor | [BLENDERviertaktmotor](https://github.com/simon23-12/BLENDERviertaktmotor) |
 | Chemie | Kochsalz löst sich | [BLENDERnaclsolution](https://github.com/simon23-12/BLENDERnaclsolution) |
+| Chemie | Der Akku von innen | [BLENDERakku](https://github.com/simon23-12/BLENDERakku) |
 | Biologie | Kinesin läuft | [BLENDERkinesinmicrotubula](https://github.com/simon23-12/BLENDERkinesinmicrotubula) |
 | Erdkunde | Platten in Bewegung | [BLENDERtektonik](https://github.com/simon23-12/BLENDERtektonik) |
 | Geschichte | Gutenberg druckt | [BLENDERgpress](https://github.com/simon23-12/BLENDERgpress) |
